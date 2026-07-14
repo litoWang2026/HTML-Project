@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Counter Button</title>
+  <title>计数器按钮</title>
   <style>
     :root {
       --bg-a: #0b132b;
@@ -160,18 +160,19 @@
 </head>
 <body>
   <main class="wrap">
-    <h1>Counter Button</h1>
-    <p>Press the button to increase the counter.</p>
+    <h1>计数器按钮</h1>
+    <p>按下按钮增加计数器。</p>
 
     <div class="count" id="count">0</div>
-    <button class="main-btn" id="countBtn">+1 Count</button>
+    <button class="main-btn" id="countBtn">+1 计数</button>
 
     <div class="actions">
       <button class="secondary" id="minusBtn">-1</button>
-      <button class="secondary danger" id="resetBtn">Reset</button>
+      <button class="secondary danger" id="resetBtn">重置</button>
+      <button class="secondary" onclick="window.location.href='index.html'">返回主页</button>
     </div>
 
-    <div class="hint">Tip: Hit spacebar to count fast.</div>
+    <div class="hint">提示：按空格键快速计数。</div>
   </main>
 
   <script>

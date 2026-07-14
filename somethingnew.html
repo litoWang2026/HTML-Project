@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Aurora — Dynamic Experience</title>
+<title>极光 — 动态体验</title>
 <style>
   :root {
     --bg-1: #0f0c29;
@@ -361,13 +361,14 @@
 <canvas id="particles"></canvas>
 
 <header>
-  <div class="logo">✦ Aurora</div>
+  <div class="logo">✦ 极光</div>
   <nav>
     <ul>
-      <li><a href="#home">Home</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#showcase">Showcase</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#home">主页</a></li>
+      <li><a href="#features">功能</a></li>
+      <li><a href="#showcase">展示</a></li>
+      <li><a href="#contact">联系</a></li>
+      <li><a href="index.html">返回</a></li>
     </ul>
   </nav>
   <div class="toggle-row">
@@ -380,55 +381,55 @@
 
 <main>
   <section class="hero" id="home">
-    <h1>Build something <span>beautiful</span> today</h1>
-    <p>A dynamic, animated landing page powered by pure HTML, CSS &amp; JavaScript — no frameworks, no dependencies, just smooth motion and glassy design.</p>
+    <h1>今天就打造<span>美丽</span>的东西</h1>
+    <p>由纯 HTML、CSS 和 JavaScript 驱动的动态、动画着陆页 — 没有框架、没有依赖项，只有平滑的动画和玻璃态设计。</p>
     <div class="cta-group">
-      <button class="btn btn-primary" id="ctaBtn">Get Started</button>
-      <button class="btn btn-outline" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Learn More</button>
+      <button class="btn btn-primary" id="ctaBtn">开始使用</button>
+      <button class="btn btn-outline" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">了解更多</button>
     </div>
     <div class="stats">
-      <div class="stat"><div class="num" data-target="128">0</div><div class="label">Projects Shipped</div></div>
-      <div class="stat"><div class="num" data-target="47">0</div><div class="label">Happy Clients</div></div>
-      <div class="stat"><div class="num" data-target="99">0</div><div class="label">% Satisfaction</div></div>
+      <div class="stat"><div class="num" data-target="128">0</div><div class="label">项目已交付</div></div>
+      <div class="stat"><div class="num" data-target="47">0</div><div class="label">满意客户</div></div>
+      <div class="stat"><div class="num" data-target="99">0</div><div class="label">满意度 %</div></div>
     </div>
   </section>
 
   <section id="features">
-    <h2 class="section-title">Features</h2>
+    <h2 class="section-title">功能</h2>
     <div class="cards">
-      <div class="card"><div class="icon">🎨</div><h3>Animated Gradients</h3><p>A living, breathing background that shifts colors smoothly for a modern aesthetic.</p></div>
-      <div class="card"><div class="icon">⚡</div><h3>Interactive UI</h3><p>Buttons, toggles and cards react to your every move with fluid transitions.</p></div>
-      <div class="card"><div class="icon">✨</div><h3>Particle Field</h3><p>A lightweight canvas particle system that follows your cursor in real time.</p></div>
-      <div class="card"><div class="icon">🌗</div><h3>Light &amp; Dark</h3><p>Toggle between themes instantly with a single elegant switch.</p></div>
-      <div class="card"><div class="icon">📊</div><h3>Animated Counters</h3><p>Numbers count up dynamically as soon as they enter the viewport.</p></div>
-      <div class="card"><div class="icon">📱</div><h3>Fully Responsive</h3><p>Looks great on desktops, tablets and phones alike.</p></div>
+      <div class="card"><div class="icon">🎨</div><h3>动画渐变</h3><p>一个活跃的、呼吸的背景，可以流畅地改变颜色，呈现现代美学。</p></div>
+      <div class="card"><div class="icon">⚡</div><h3>交互式界面</h3><p>按钮、开关和卡片对您的每个动作做出反应，具有流畅的过渡效果。</p></div>
+      <div class="card"><div class="icon">✨</div><h3>粒子字段</div><p>一个轻量级的画布粒子系统，实时跟踪您的光标。</p></div>
+      <div class="card"><div class="icon">🌗</div><h3>浅色和深色</h3><p>使用单个优雅的开关即时切换主题。</p></div>
+      <div class="card"><div class="icon">📊</div><h3>动画计数器</h3><p>数字在进入视口后动态计数。</p></div>
+      <div class="card"><div class="icon">📱</div><h3>完全响应式</h3><p>在桌面、平板电脑和手机上看起来都很好。</p></div>
     </div>
   </section>
 
   <section id="showcase">
-    <h2 class="section-title">Try the Showcase</h2>
+    <h2 class="section-title">尝试展示</h2>
     <div class="showcase">
       <div class="card" style="max-width:500px;text-align:center;">
         <div class="icon">🖱️</div>
-        <h3>Move your mouse around</h3>
-        <p>The particles above react to your cursor. Click anywhere on the page to burst new particles!</p>
+        <h3>移动您的鼠标</h3>
+        <p>上方的粒子对您的光标做出反应。在页面上的任何地方单击以产生新粒子！</p>
       </div>
     </div>
   </section>
 
   <section id="contact">
-    <h2 class="section-title">Get in Touch</h2>
+    <h2 class="section-title">联系我们</h2>
     <div class="cards" style="max-width:600px;margin:0 auto;">
       <div class="card">
-        <p style="margin-bottom:1rem;">Say hello and let's build something great together.</p>
-        <button class="btn btn-primary" id="contactBtn">Say Hello</button>
+        <p style="margin-bottom:1rem;">打声招呼，让我们一起打造美好的东西。</p>
+        <button class="btn btn-primary" id="contactBtn">发送问候</button>
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  &copy; <span id="year"></span> Aurora. Crafted with HTML, CSS &amp; JavaScript.
+  &copy; <span id="year"></span> 极光。用 HTML、CSS 和 JavaScript 精心打造。
 </footer>
 
 <div class="fab" id="scrollTop">↑</div>
