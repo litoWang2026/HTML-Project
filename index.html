@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WLT 项目</title>
+  <title>WLT Project</title>
   <style>
     :root {
       --bg-1: #071a26;
@@ -38,7 +38,7 @@
     }
 
     .shell {
-      width: min(920px, 100%);
+      width: min(980px, 100%);
       border: 1px solid var(--panel-border);
       background: var(--panel);
       backdrop-filter: blur(12px);
@@ -46,6 +46,22 @@
       padding: clamp(1.4rem, 2.2vw, 2.4rem);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
       animation: rise 800ms ease both;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0.8rem;
+    }
+
+    .lang-btn {
+      border: 1px solid var(--panel-border);
+      border-radius: 999px;
+      padding: 0.5rem 0.85rem;
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 700;
     }
 
     h1 {
@@ -134,30 +150,36 @@
 </head>
 <body>
   <main class="shell">
-    <h1>欢迎来到 <span>WLT 项目</span></h1>
-    <p>
+    <div class="toolbar">
+      <button class="lang-btn" id="langToggle">EN</button>
+    </div>
+
+    <h1 data-i18n="welcome">欢迎来到 <span>WLT 项目</span></h1>
+    <p data-i18n="desc">
       这是您的主页面。它响应迅速、充满动力，并准备好进行自定义。
       使用下方的按钮与实时计数器交互。
     </p>
 
     <div class="actions">
-      <button class="primary" id="addVisitors">添加访客</button>
-      <button class="secondary" id="addLikes">添加点赞</button>
-      <button class="primary" onclick="window.location.href='counter-button.html'">计数器按钮</button>
-      <button class="secondary" onclick="window.location.href='somethingnew.html'">动画展示</button>
+      <button class="primary" id="addVisitors" data-i18n="addVisitors">添加访客</button>
+      <button class="secondary" id="addLikes" data-i18n="addLikes">添加点赞</button>
+      <button class="primary" onclick="window.location.href='counter-button.html'" data-i18n="counterPage">计数器按钮</button>
+      <button class="secondary" onclick="window.location.href='somethingnew.html'" data-i18n="showcasePage">动画展示</button>
+      <button class="primary" onclick="window.location.href='fun-quiz.html'" data-i18n="quizPage">趣味问答</button>
+      <button class="secondary" onclick="window.location.href='reflex-game.html'" data-i18n="reflexPage">反应力挑战</button>
     </div>
 
     <section class="grid">
       <article class="card">
-        <div class="label">访客数</div>
+        <div class="label" data-i18n="visitors">访客数</div>
         <div class="value" id="visitors">0</div>
       </article>
       <article class="card">
-        <div class="label">点赞数</div>
+        <div class="label" data-i18n="likes">点赞数</div>
         <div class="value" id="likes">0</div>
       </article>
       <article class="card">
-        <div class="label">当前时间</div>
+        <div class="label" data-i18n="time">当前时间</div>
         <div class="value" id="clock">--:--:--</div>
       </article>
     </section>
@@ -167,9 +189,59 @@
     const visitorsEl = document.getElementById("visitors");
     const likesEl = document.getElementById("likes");
     const clockEl = document.getElementById("clock");
+    const langToggle = document.getElementById("langToggle");
 
     let visitors = 0;
     let likes = 0;
+
+    const dict = {
+      zh: {
+        welcome: "欢迎来到 <span>WLT 项目</span>",
+        desc: "这是您的主页面。它响应迅速、充满动力，并准备好进行自定义。使用下方的按钮与实时计数器交互。",
+        addVisitors: "添加访客",
+        addLikes: "添加点赞",
+        counterPage: "计数器按钮",
+        showcasePage: "动画展示",
+        quizPage: "趣味问答",
+        reflexPage: "反应力挑战",
+        visitors: "访客数",
+        likes: "点赞数",
+        time: "当前时间"
+      },
+      en: {
+        welcome: "Welcome to <span>WLT Project</span>",
+        desc: "This is your main page. It is fast, energetic, and ready to customize. Use the buttons below to interact with live counters.",
+        addVisitors: "Add Visitor",
+        addLikes: "Add Like",
+        counterPage: "Counter Button",
+        showcasePage: "Animated Showcase",
+        quizPage: "Fun Quiz",
+        reflexPage: "Reflex Challenge",
+        visitors: "Visitors",
+        likes: "Likes",
+        time: "Current Time"
+      }
+    };
+
+    let lang = localStorage.getItem("wltLang") || "zh";
+
+    function applyLanguage() {
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.dataset.i18n;
+        if (dict[lang][key]) {
+          el.innerHTML = dict[lang][key];
+        }
+      });
+      langToggle.textContent = lang === "zh" ? "EN" : "中";
+    }
+
+    langToggle.addEventListener("click", () => {
+      lang = lang === "zh" ? "en" : "zh";
+      localStorage.setItem("wltLang", lang);
+      applyLanguage();
+      tickClock();
+    });
 
     document.getElementById("addVisitors").addEventListener("click", () => {
       visitors += 1;
@@ -183,9 +255,10 @@
 
     function tickClock() {
       const now = new Date();
-      clockEl.textContent = now.toLocaleTimeString();
+      clockEl.textContent = now.toLocaleTimeString(lang === "zh" ? "zh-CN" : "en-US");
     }
 
+    applyLanguage();
     tickClock();
     setInterval(tickClock, 1000);
   </script>

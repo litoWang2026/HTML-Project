@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>计数器按钮</title>
+  <title>Counter Button</title>
   <style>
     :root {
       --bg-a: #0b132b;
@@ -34,18 +34,35 @@
                   radial-gradient(circle at 80% 10%, #ffd16622, transparent 30%),
                   linear-gradient(135deg, var(--bg-a), var(--bg-b), var(--bg-c));
       overflow: hidden;
+      padding: 1rem;
     }
 
     .wrap {
-      width: min(92vw, 540px);
+      width: min(92vw, 560px);
       border: 1px solid var(--card-border);
       background: var(--card);
       backdrop-filter: blur(10px);
       border-radius: 24px;
-      padding: 2rem;
+      padding: 1.2rem 2rem 2rem;
       text-align: center;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
       animation: riseIn 700ms ease both;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0.6rem;
+    }
+
+    .lang-btn {
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      font-weight: 700;
+      cursor: pointer;
     }
 
     h1 {
@@ -98,7 +115,7 @@
     .actions {
       margin-top: 1rem;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 0.8rem;
     }
 
@@ -160,19 +177,24 @@
 </head>
 <body>
   <main class="wrap">
-    <h1>计数器按钮</h1>
-    <p>按下按钮增加计数器。</p>
-
-    <div class="count" id="count">0</div>
-    <button class="main-btn" id="countBtn">+1 计数</button>
-
-    <div class="actions">
-      <button class="secondary" id="minusBtn">-1</button>
-      <button class="secondary danger" id="resetBtn">重置</button>
-      <button class="secondary" onclick="window.location.href='index.html'">返回主页</button>
+    <div class="topbar">
+      <button class="lang-btn" id="langToggle">EN</button>
     </div>
 
-    <div class="hint">提示：按空格键快速计数。</div>
+    <h1 data-i18n="title">计数器按钮</h1>
+    <p data-i18n="subtitle">按下按钮增加计数器。</p>
+
+    <div class="count" id="count">0</div>
+    <button class="main-btn" id="countBtn" data-i18n="plus">+1 计数</button>
+
+    <div class="actions">
+      <button class="secondary" id="minusBtn" data-i18n="minus">-1</button>
+      <button class="secondary danger" id="resetBtn" data-i18n="reset">重置</button>
+      <button class="secondary" onclick="window.location.href='index.html'" data-i18n="home">返回主页</button>
+      <button class="secondary" onclick="window.location.href='fun-quiz.html'" data-i18n="quiz">趣味问答</button>
+    </div>
+
+    <div class="hint" data-i18n="hint">提示：按空格键快速计数。</div>
   </main>
 
   <script>
@@ -180,8 +202,44 @@
     const countBtn = document.getElementById("countBtn");
     const minusBtn = document.getElementById("minusBtn");
     const resetBtn = document.getElementById("resetBtn");
+    const langToggle = document.getElementById("langToggle");
 
     let count = 0;
+    let lang = localStorage.getItem("wltLang") || "zh";
+
+    const dict = {
+      zh: {
+        title: "计数器按钮",
+        subtitle: "按下按钮增加计数器。",
+        plus: "+1 计数",
+        minus: "-1",
+        reset: "重置",
+        home: "返回主页",
+        quiz: "趣味问答",
+        hint: "提示：按空格键快速计数。"
+      },
+      en: {
+        title: "Counter Button",
+        subtitle: "Press the button to increase the counter.",
+        plus: "+1 Count",
+        minus: "-1",
+        reset: "Reset",
+        home: "Back Home",
+        quiz: "Fun Quiz",
+        hint: "Tip: Press Space for quick counting."
+      }
+    };
+
+    function applyLanguage() {
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.dataset.i18n;
+        if (dict[lang][key]) {
+          el.textContent = dict[lang][key];
+        }
+      });
+      langToggle.textContent = lang === "zh" ? "EN" : "中";
+    }
 
     function render() {
       countEl.textContent = String(count);
@@ -203,6 +261,12 @@
         setTimeout(() => spark.remove(), 700);
       }
     }
+
+    langToggle.addEventListener("click", () => {
+      lang = lang === "zh" ? "en" : "zh";
+      localStorage.setItem("wltLang", lang);
+      applyLanguage();
+    });
 
     countBtn.addEventListener("click", (event) => {
       count += 1;
@@ -227,6 +291,8 @@
         render();
       }
     });
+
+    applyLanguage();
   </script>
 </body>
 </html>

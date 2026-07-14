@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reflex Challenge</title>
+  <style>
+    :root {
+      --bg1: #102116;
+      --bg2: #1f3b2d;
+      --bg3: #225b44;
+      --text: #ebfff4;
+      --muted: #b8dfca;
+      --panel: rgba(255, 255, 255, 0.1);
+      --border: rgba(255, 255, 255, 0.22);
+      --accent: #ffd166;
+      --accent2: #7ef0b2;
+      --danger: #ff8a80;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 12%, #ffd16633, transparent 28%),
+        radial-gradient(circle at 88% 20%, #7ef0b244, transparent 32%),
+        linear-gradient(130deg, var(--bg1), var(--bg2), var(--bg3));
+      padding: 1rem;
+    }
+
+    .card {
+      width: min(840px, 100%);
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      padding: 1.3rem;
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.34);
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .left, .right {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.62rem 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border-radius: 999px;
+    }
+
+    .main-btn {
+      background: linear-gradient(90deg, var(--accent), #ffe6ae);
+      color: #422a00;
+    }
+
+    .sub-btn {
+      background: linear-gradient(90deg, var(--accent2), #b6ffd9);
+      color: #04321d;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      margin-bottom: 0.6rem;
+    }
+
+    .desc {
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .arena {
+      margin-top: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      min-height: 360px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .target {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      position: absolute;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      background: radial-gradient(circle at 35% 35%, #fff8cf, #ffb86f);
+      display: none;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+      animation: pulse 0.8s ease infinite alternate;
+    }
+
+    .meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .message {
+      margin-top: 0.8rem;
+      min-height: 26px;
+      color: #fff5dd;
+      font-weight: 700;
+    }
+
+    .board {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .board h2 {
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .board-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.6rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .board-item:last-child {
+      border-bottom: none;
+    }
+
+    .bad {
+      color: var(--danger);
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.07); }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="top">
+      <div class="left">
+        <button class="lang-btn" id="langToggle">EN</button>
+        <button class="sub-btn" onclick="window.location.href='index.html'" data-i18n="home">返回主页</button>
+        <button class="sub-btn" onclick="window.location.href='fun-quiz.html'" data-i18n="quiz">趣味问答</button>
+      </div>
+      <div class="right">
+        <button class="main-btn" id="startBtn" data-i18n="start">开始挑战</button>
+      </div>
+    </div>
+
+    <h1 data-i18n="title">反应力挑战</h1>
+    <p class="desc" data-i18n="desc">点击开始后，目标会随机出现。尽快点击，系统会计算你的平均反应时间。</p>
+
+    <div class="arena" id="arena">
+      <button class="target" id="target"></button>
+    </div>
+
+    <div class="meta">
+      <div><span data-i18n="round">回合</span>: <span id="round">0/6</span></div>
+      <div><span data-i18n="best">最佳</span>: <span id="best">-</span></div>
+      <div><span data-i18n="avg">平均</span>: <span id="avg">-</span></div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <section class="board">
+      <h2 data-i18n="leaderboard">排行榜</h2>
+      <div id="leaderboardList"></div>
+    </section>
+  </main>
+
+  <script>
+    const langToggle = document.getElementById('langToggle');
+    const startBtn = document.getElementById('startBtn');
+    const arena = document.getElementById('arena');
+    const target = document.getElementById('target');
+    const roundEl = document.getElementById('round');
+    const bestEl = document.getElementById('best');
+    const avgEl = document.getElementById('avg');
+    const messageEl = document.getElementById('message');
+    const leaderboardListEl = document.getElementById('leaderboardList');
+
+    let lang = localStorage.getItem('wltLang') || 'zh';
+    const roundsTotal = 6;
+    let currentRound = 0;
+    let clickStart = 0;
+    let timerId = 0;
+    let active = false;
+    let records = [];
+    const leaderboardKey = 'wltLeaderboard';
+
+    const ui = {
+      zh: {
+        home: '返回主页',
+        quiz: '趣味问答',
+        start: '开始挑战',
+        title: '反应力挑战',
+        desc: '点击开始后，目标会随机出现。尽快点击，系统会计算你的平均反应时间。',
+        round: '回合',
+        best: '最佳',
+        avg: '平均',
+        wait: '准备中，请等待目标出现...',
+        early: '太快了，请等目标出现后再点击。',
+        done: '挑战完成！',
+        ms: '毫秒',
+        leaderboard: '排行榜',
+        noRecord: '暂无记录，快来挑战一次。',
+        reflexGame: '反应',
+        quizGame: '问答'
+      },
+      en: {
+        home: 'Back Home',
+        quiz: 'Fun Quiz',
+        start: 'Start Challenge',
+        title: 'Reflex Challenge',
+        desc: 'After you start, a target appears in random spots. Click fast to measure your average reaction time.',
+        round: 'Round',
+        best: 'Best',
+        avg: 'Average',
+        wait: 'Get ready, wait for the target...',
+        early: 'Too early. Wait until the target appears.',
+        done: 'Challenge complete!',
+        ms: 'ms',
+        leaderboard: 'Leaderboard',
+        noRecord: 'No records yet. Play one round first.',
+        reflexGame: 'Reflex',
+        quizGame: 'Quiz'
+      }
+    };
+
+    function getLeaderboard() {
+      const raw = localStorage.getItem(leaderboardKey);
+      if (!raw) {
+        return [];
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveReflexRecord(best, avg) {
+      const board = getLeaderboard();
+      board.push({
+        game: 'reflex',
+        value: best,
+        detail: `${best}${ui[lang].ms} / ${avg}${ui[lang].ms}`,
+        ts: Date.now()
+      });
+      localStorage.setItem(leaderboardKey, JSON.stringify(board.slice(-15)));
+    }
+
+    function renderLeaderboard() {
+      const board = getLeaderboard().slice(-5).reverse();
+      if (board.length === 0) {
+        leaderboardListEl.innerHTML = `<div class="board-item">${ui[lang].noRecord}</div>`;
+        return;
+      }
+      leaderboardListEl.innerHTML = board.map((item, index) => {
+        const gameText = item.game === 'quiz' ? ui[lang].quizGame : ui[lang].reflexGame;
+        return `<div class="board-item"><span>#${index + 1} ${gameText}</span><span>${item.detail}</span></div>`;
+      }).join('');
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.dataset.i18n;
+        if (ui[lang][key]) {
+          el.textContent = ui[lang][key];
+        }
+      });
+      langToggle.textContent = lang === 'zh' ? 'EN' : '中';
+      if (!active && records.length === 0) {
+        messageEl.textContent = '';
+      }
+      renderLeaderboard();
+    }
+
+    function updateStats() {
+      roundEl.textContent = `${currentRound}/${roundsTotal}`;
+      if (records.length === 0) {
+        bestEl.textContent = '-';
+        avgEl.textContent = '-';
+        return;
+      }
+      const best = Math.min(...records);
+      const avg = Math.round(records.reduce((a, b) => a + b, 0) / records.length);
+      bestEl.textContent = `${best} ${ui[lang].ms}`;
+      avgEl.textContent = `${avg} ${ui[lang].ms}`;
+    }
+
+    function placeTarget() {
+      const rect = arena.getBoundingClientRect();
+      const maxX = rect.width - 70;
+      const maxY = rect.height - 70;
+      const x = Math.max(0, Math.random() * maxX);
+      const y = Math.max(0, Math.random() * maxY);
+      target.style.left = `${x}px`;
+      target.style.top = `${y}px`;
+      target.style.display = 'block';
+      clickStart = performance.now();
+      active = true;
+    }
+
+    function nextRound() {
+      if (currentRound >= roundsTotal) {
+        active = false;
+        target.style.display = 'none';
+        messageEl.classList.remove('bad');
+        messageEl.textContent = ui[lang].done;
+        if (records.length > 0) {
+          const best = Math.min(...records);
+          const avg = Math.round(records.reduce((a, b) => a + b, 0) / records.length);
+          saveReflexRecord(best, avg);
+          renderLeaderboard();
+        }
+        startBtn.disabled = false;
+        return;
+      }
+
+      messageEl.classList.remove('bad');
+      messageEl.textContent = ui[lang].wait;
+      target.style.display = 'none';
+      active = false;
+      const delay = 700 + Math.random() * 1600;
+      timerId = window.setTimeout(placeTarget, delay);
+    }
+
+    function startGame() {
+      clearTimeout(timerId);
+      records = [];
+      currentRound = 0;
+      updateStats();
+      startBtn.disabled = true;
+      nextRound();
+    }
+
+    startBtn.addEventListener('click', startGame);
+
+    target.addEventListener('click', () => {
+      if (!active) {
+        return;
+      }
+      const delta = Math.round(performance.now() - clickStart);
+      records.push(delta);
+      currentRound += 1;
+      updateStats();
+      nextRound();
+    });
+
+    arena.addEventListener('click', (event) => {
+      if (event.target === target) {
+        return;
+      }
+      if (startBtn.disabled && !active) {
+        messageEl.classList.add('bad');
+        messageEl.textContent = ui[lang].early;
+      }
+    });
+
+    langToggle.addEventListener('click', () => {
+      lang = lang === 'zh' ? 'en' : 'zh';
+      localStorage.setItem('wltLang', lang);
+      applyLanguage();
+      updateStats();
+    });
+
+    applyLanguage();
+    updateStats();
+  </script>
+</body>
+</html>
